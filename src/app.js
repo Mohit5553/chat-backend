@@ -28,12 +28,12 @@ export function createApp() {
   // 1. GLOBAL MIDDLEWARES
   const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
     .split(",")
-    .map(o => o.trim());
+    .map(o => o.trim().replace(/\/$/, ""));
 
   app.use(cors({
     origin: (origin, callback) => {
       // allow server-to-server / curl / no-origin requests
-      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) return callback(null, true);
       callback(new Error(`CORS blocked: ${origin}`));
     },
     credentials: true
