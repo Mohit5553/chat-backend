@@ -25,6 +25,12 @@ const __dirname = path.dirname(__filename);
 export function createApp() {
   const app = express();
 
+  // Normalize double slashes in the URL
+  app.use((req, res, next) => {
+    req.url = req.url.replace(/\/{2,}/g, "/");
+    next();
+  });
+
   // 1. GLOBAL MIDDLEWARES
   const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
     .split(",")
